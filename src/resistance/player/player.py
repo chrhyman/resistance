@@ -1,7 +1,7 @@
 from typing import Any
 
 from ..role import Role
-from ..util import IllegalAction
+from ..util import IllegalActionGameError
 
 
 class Player:
@@ -27,8 +27,8 @@ class Player:
 
     def assign_role(self, role: Role):
         if self.role is not None:
-            raise IllegalAction(f"Player {self.name} (id={self.id}) already assigned role {self.role}",
-                                summary="Role is already assigned to this player.")
+            raise IllegalActionGameError(f"Player {self.name} (id={self.id}) already assigned role {self.role}",
+                                         summary="A role is already assigned to this player.")
 
         if not isinstance(role, Role):
             raise TypeError(f"Can only assign Role type, but {role} is {type(role)}")

@@ -4,7 +4,10 @@ class GameError(Exception):
     Attributes:
         - message: the error message
         - summary: (optional) a version of the message with no hidden game information
+
+    The message is raised as an Exception.
     """
+
     def __init__(self, message, summary=''):
         if summary == '':
             summary = message
@@ -15,5 +18,5 @@ class GameError(Exception):
         super().__init__(self.message)
 
 
-class IllegalAction(GameError):
+class IllegalActionGameError(GameError):
     pass
