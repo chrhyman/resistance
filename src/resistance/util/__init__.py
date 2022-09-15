@@ -1,3 +1,5 @@
-__all__ = ["GameError", "IllegalActionGameError"]
+__all__ = ["GameError", "IllegalActionGameError", "InvalidNumberGameError",
+           "MIN_PLAYERS", "MAX_PLAYERS"]
 
-from .error import GameError, IllegalActionGameError
+from .errors import GameError, IllegalActionGameError, InvalidNumberGameError
+from .constants import MIN_PLAYERS, MAX_PLAYERS

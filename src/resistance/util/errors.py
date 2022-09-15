@@ -8,8 +8,8 @@ class GameError(Exception):
     The message is raised as an Exception.
     """
 
-    def __init__(self, message, summary=''):
-        if summary == '':
+    def __init__(self, message, summary=""):
+        if summary == "":
             summary = message
 
         self.summary = summary
@@ -19,4 +19,8 @@ class GameError(Exception):
 
 
 class IllegalActionGameError(GameError):
+    pass
+
+
+class InvalidNumberGameError(GameError):
     pass
