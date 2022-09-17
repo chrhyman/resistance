@@ -1,15 +1,16 @@
-__all__ = ["Player"]
+from typing import Any, TypeVar
 
-from typing import Any
+from .role import Role
+from .util import IllegalActionGameError
 
-from ..role import Role
-from ..util import IllegalActionGameError
+# Self can be imported from typing in Python 3.11+
+Self = TypeVar("Self", bound="Player")
 
 
 class Player:
     _next_id = 1
 
-    def __init__(self, name: str = "", metadata: Any = None):
+    def __init__(self, name: str = "", metadata: Any = None) -> None:
         self.id = Player._next_id
         Player._next_id += 1
 
@@ -28,7 +29,7 @@ class Player:
 
         return f"{self.name} (id={self.id})"
 
-    def assign_role(self, role: Role):
+    def assign_role(self, role: Role) -> Self:
         if self.role is not None:
             raise IllegalActionGameError(f"Player {self.name} (id={self.id}) already assigned role {self.role}",
                                          summary="A role is already assigned to this player.")
@@ -39,11 +40,10 @@ class Player:
         self.role = role
         return self
 
-    def set_ready_status(self, status: bool):
-        status = bool(status)
-        self.ready = status
+    def rename(self, new_name: str) -> Self:
+        self.name = str(new_name)
         return self
 
-    def rename(self, new_name: str):
-        self.name = str(new_name)
+    def set_ready_status(self, status: bool) -> Self:
+        self.ready = bool(status)
         return self

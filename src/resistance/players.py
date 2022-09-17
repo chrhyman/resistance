@@ -1,24 +1,25 @@
 from random import shuffle
 from typing import List, Optional
 
-from . import Player
-from ..util import IllegalActionGameError, InvalidNumberGameError
-from ..util import MIN_PLAYERS, MAX_PLAYERS
+from .player import Player
+from .util import IllegalActionGameError, InvalidNumberGameError
+from .util import MIN_PLAYERS, MAX_PLAYERS
 
 
 class Players:
     MIN = MIN_PLAYERS
     MAX = MAX_PLAYERS
 
-    def __init__(self, player_list: List[Player] = None):
+    def __init__(self, player_list: List[Player] = None) -> None:
         self.player_list = []
+        self.frozen: bool = False
 
         if player_list is not None:
-            self.add_players(player_list)
+            for player in player_list:
+                self.add_player(player)
 
         self.unready_all_players()
 
-        self.frozen: bool = False
         self.leader_index: Optional[int] = None
         self.player_count: Optional[int] = None
 
@@ -33,10 +34,6 @@ class Players:
             raise IllegalActionGameError("Already started; cannot add new players to game in progress")
 
         self.player_list.append(player)
-
-    def add_players(self, player_list: List[Player]) -> None:
-        for player in player_list:
-            self.add_player(player)
 
     def all_players_ready(self) -> bool:
         return all(pl.ready for pl in self.player_list)
@@ -53,13 +50,15 @@ class Players:
                 return player
         return None
 
-    def next_leader(self):
+    def next_leader(self) -> Player:
         if not self.frozen or self.leader_index is None:
             raise IllegalActionGameError("Game hasn't started")
 
         self.leader_index += 1
         if self.leader_index >= self.player_count:
             self.leader_index = 0
+
+        return self.player_list[self.leader_index]
 
     def remove_player(self, player: Player):
         if not isinstance(player, Player):
@@ -79,19 +78,22 @@ class Players:
 
     def start(self) -> None:
         if self.frozen:
-            raise IllegalActionGameError("Already started")
-
-        if not(Players.MIN <= len(self.player_list) <= Players.MAX):
-            raise InvalidNumberGameError(
-                f"Invalid player count: {len(self.player_list)} (should be {Players.MIN}-{Players.MAX})")
+            raise IllegalActionGameError("Game already started")
 
         if not self.all_players_ready():
             raise IllegalActionGameError("Not all players are ready to start")
 
+        current_count = len(self.player_list)
+
+        if not(Players.MIN <= current_count <= Players.MAX):
+            raise InvalidNumberGameError(
+                f"Invalid player count: {current_count} (must have {Players.MIN} to {Players.MAX} players)",
+                summary="Invalid player count")
+
         shuffle(self.player_list)
-        self.frozen = True
-        self.player_count = len(self.player_list)
+        self.player_count = current_count
         self.leader_index = 0
+        self.frozen = True
 
     def unready_all_players(self) -> None:
         for pl in self.player_list:
