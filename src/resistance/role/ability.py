@@ -2,6 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class Ability(ABC):
+    """
+    A wrapper for a boolean representing a single ability a role may have.
+    """
     def __init__(self, value: bool) -> None:
         self.value = bool(value)
 
