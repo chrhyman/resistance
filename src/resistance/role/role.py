@@ -51,23 +51,23 @@ class Role(ABC):
         pass
 
     def can(self, ability: Union[Ability, type]) -> Ability:
-        def ability_is_class(cls):
+        def class_or_instance_of(cls: type) -> bool:
             return isinstance(ability, cls) or ability is cls
 
-        if ability_is_class(SeeSpies):
+        if class_or_instance_of(SeeSpies):
             return self.can_see_spies
 
-        if ability_is_class(ShootMerlin):
+        if class_or_instance_of(ShootMerlin):
             return self.can_shoot_merlin
 
-        if ability_is_class(SeeMerlin):
+        if class_or_instance_of(SeeMerlin):
             return self.can_see_merlin
 
-        if ability_is_class(LookLikeMerlin):
+        if class_or_instance_of(LookLikeMerlin):
             return self.can_look_like_merlin
 
-        if ability_is_class(HideFromMerlin):
+        if class_or_instance_of(HideFromMerlin):
             return self.can_hide_from_merlin
 
-        if ability_is_class(HideFromSpies):
+        if class_or_instance_of(HideFromSpies):
             return self.can_hide_from_spies
