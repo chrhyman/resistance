@@ -2,13 +2,12 @@ from ..role import Role
 from ..alignment import Alignment
 from ..alignments import Evil
 from ..abilities import SeeSpies, SeeMerlin, ShootMerlin, LookLikeMerlin, HideFromMerlin, HideFromSpies
-from ...util.constants import EVIL_TEAM_MEMBER
 
 
 class BaseEvil(Role):
     @property
     def name(self) -> str:
-        return EVIL_TEAM_MEMBER
+        return self.alignment.member
 
     @property
     def alignment(self) -> Alignment:

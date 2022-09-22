@@ -16,3 +16,4 @@ class TestGood:
     def test_good(self):
         g = Good()
         assert g.good
+        assert g

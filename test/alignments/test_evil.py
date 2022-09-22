@@ -16,3 +16,4 @@ class TestGood:
     def test_good(self):
         e = Evil()
         assert not e.good
+        assert not e

@@ -1,32 +1,32 @@
-from src.resistance.role import Merlin
-from src.resistance.role.alignments import Good
+from src.resistance.role import BaseEvil
+from src.resistance.role.alignments import Evil
 from src.resistance.role.abilities import (SeeSpies, SeeMerlin, ShootMerlin,
                                            LookLikeMerlin, HideFromMerlin, HideFromSpies)
-from src.resistance.util.constants import MERLIN
+from src.resistance.util.constants import EVIL_TEAM_MEMBER
 
 
-class TestMerlin:
+class TestBaseEvil:
     def test_name(self):
-        r = Merlin()
-        assert r.name == MERLIN
-        assert str(r) == MERLIN
+        r = BaseEvil()
+        assert r.name == EVIL_TEAM_MEMBER
+        assert str(r) == EVIL_TEAM_MEMBER
 
     def test_alignment(self):
-        r = Merlin()
-        assert isinstance(r.alignment, Good)
+        r = BaseEvil()
+        assert isinstance(r.alignment, Evil)
 
     def test_abilities(self):
-        r = Merlin()
+        r = BaseEvil()
 
-        # verify correct boolean value via __bool__
+        # verify correct boolean value via Ability.__bool__
         assert r.can_see_spies
         assert not r.can_see_merlin
         assert not r.can_shoot_merlin
-        assert r.can_look_like_merlin
+        assert not r.can_look_like_merlin
         assert not r.can_hide_from_spies
         assert not r.can_hide_from_merlin
 
-        # verify correct type via Role.can and __eq__
+        # verify correct type via Role.can and Ability.__eq__
         assert r.can_see_spies == r.can(SeeSpies)
         assert r.can_see_merlin == r.can(SeeMerlin)
         assert r.can_shoot_merlin == r.can(ShootMerlin)

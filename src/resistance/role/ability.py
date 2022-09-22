@@ -1,4 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import TypeVar
+
+Self = TypeVar("Self", bound="Ability")
 
 
 class Ability(ABC):
@@ -10,6 +13,9 @@ class Ability(ABC):
 
     def __bool__(self) -> bool:
         return bool(self.value)
+
+    def __eq__(self, other: Self) -> bool:
+        return self.value == other.value and type(self) is type(other)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({bool(self.value)})"
