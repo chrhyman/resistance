@@ -1,12 +1,20 @@
 from abc import ABC, abstractmethod
-from typing import Union
+from typing import TypeVar, Union
 
 from .alignment import Alignment
 from .ability import Ability
 from .abilities import SeeSpies, ShootMerlin, SeeMerlin, LookLikeMerlin, HideFromMerlin, HideFromSpies
 
+Self = TypeVar("Self", bound="Role")
+
 
 class Role(ABC):
+    def __eq__(self, other: Self) -> bool:
+        return type(self) is type(other)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
     def __str__(self) -> str:
         return self.name
 
@@ -50,7 +58,7 @@ class Role(ABC):
     def can_hide_from_spies(self) -> HideFromSpies:
         pass
 
-    def can(self, ability: Union[Ability, type]) -> Ability:
+    def can(self, ability: Union[type, Ability]) -> Ability:
         def class_or_instance_of(cls: type) -> bool:
             return isinstance(ability, cls) or ability is cls
 

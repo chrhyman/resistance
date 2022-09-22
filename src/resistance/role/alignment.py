@@ -5,6 +5,12 @@ class Alignment(ABC):
     def __bool__(self) -> bool:
         return bool(self.good)
 
+    def __eq__(self, other) -> bool:
+        return type(self) is type(other)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
     def __str__(self) -> str:
         return str(self.name)
 
