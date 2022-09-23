@@ -87,8 +87,7 @@ class Players:
 
         if not(Players.MIN <= current_count <= Players.MAX):
             raise InvalidNumberGameError(
-                f"Invalid player count: {current_count} (must have {Players.MIN} to {Players.MAX} players)",
-                summary="Invalid player count")
+                f"Invalid player count: {current_count} (must have {Players.MIN} to {Players.MAX} players)")
 
         shuffle(self.player_list)
         self.player_count = current_count
