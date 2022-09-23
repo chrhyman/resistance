@@ -35,8 +35,14 @@ class GameError(BaseGameError):
 
 
 class IllegalActionGameError(GameError):
-    pass
+    """
+    Raised when an action is attempted but cannot be completed due to game rules.
+    (e.g. a non-Assassin tries to shoot, trying to start a game that already started, etc.)
+    """
 
 
 class InvalidNumberGameError(GameError):
-    pass
+    """
+    Raised when an action is attempted with an incorrect number of arguments
+    or when the game state has an incorrect number (e.g. too few players, too many players, team too small, etc.)
+    """
