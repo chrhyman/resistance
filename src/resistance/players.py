@@ -2,8 +2,8 @@ from random import shuffle
 from typing import List, Optional
 
 from .player import Player
-from .util import IllegalActionGameError, InvalidNumberGameError
-from .util import MIN_PLAYERS, MAX_PLAYERS
+from .util.errors import IllegalActionGameError, InvalidNumberGameError
+from .util.constants import MIN_PLAYERS, MAX_PLAYERS
 
 
 class Players:

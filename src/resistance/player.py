@@ -1,16 +1,15 @@
-from typing import Any, TypeVar
+from typing import Any, Optional, TypeVar
 
 from .role import Role
-from .util import IllegalActionGameError
+from .util.errors import IllegalActionGameError
 
-# Self can be imported from typing in Python 3.11+
 Self = TypeVar("Self", bound="Player")
 
 
 class Player:
     _next_id = 1
 
-    def __init__(self, name: str = "", metadata: Any = None) -> None:
+    def __init__(self, name: str = "", metadata: Optional[Any] = None) -> None:
         self.id = Player._next_id
         Player._next_id += 1
 
