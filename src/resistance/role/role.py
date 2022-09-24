@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Union
+from typing import TypeVar
 
 from .alignment import Alignment
 from .ability import Ability
@@ -58,9 +58,9 @@ class Role(ABC):
     def can_hide_from_spies(self) -> HideFromSpies:
         pass
 
-    def can(self, ability: Union[type, Ability]) -> Ability:
+    def can(self, ability: type | Ability) -> Ability:
         def class_or_instance_of(cls: type) -> bool:
-            return isinstance(ability, cls) or ability is cls
+            return ability is cls or isinstance(ability, cls)
 
         if class_or_instance_of(SeeSpies):
             return self.can_see_spies
