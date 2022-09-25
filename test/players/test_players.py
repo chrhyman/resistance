@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from pytest import raises
 
 from src.resistance.players import Player, Players
@@ -186,7 +188,33 @@ class TestPlayers:
         assert players.leader_index == 0
 
     def test_next_leader(self):
-        pass
+        ps = [Player() for _ in range(MIN_PLAYERS)]
+        players = Players(ps)
+        for player in players:
+            player.set_ready_status(True)
+
+        players.start()
+        dc_players = deepcopy(players)
+
+        assert players is not dc_players
+        assert players.get_leader() is not dc_players.get_leader()
+        assert players.get_leader() == dc_players.get_leader()
+
+        leaders = []
+        for _ in range(MIN_PLAYERS * 2):
+            leader = players.next_leader()
+            copy_leader = dc_players.increment_leader().get_leader()
+            assert leader == copy_leader
+            leaders.append(leader)
+
+        assert len(leaders) == MIN_PLAYERS * 2
+
+        unique_leaders = []
+        for player in leaders:
+            if player not in unique_leaders:
+                unique_leaders.append(player)
+
+        assert len(unique_leaders) == MIN_PLAYERS
 
     def test_remove_player(self):
         pass

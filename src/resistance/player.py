@@ -45,6 +45,18 @@ class Player:
         self.ready: bool = False
         self.role: Role | None = None
 
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, Player):
+            return False
+
+        attrs = ["id", "name", "metadata", "ready", "role"]
+
+        for attr in attrs:
+            if getattr(self, attr) != getattr(other, attr):
+                return False
+
+        return True
+
     def __repr__(self) -> str:
         return f"{self.name} (id={self.id})"
 
