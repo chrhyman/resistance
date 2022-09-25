@@ -16,7 +16,7 @@ class Player:
 
         Player(name: str, metadata: Any = None)
 
-    Properties::
+    Instance Properties::
 
         Player.id: int        # unique
         Player.name: str
