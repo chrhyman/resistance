@@ -1,3 +1,4 @@
+from src.resistance.role.alignment import Alignment
 from src.resistance.role.alignments import Good, Evil
 
 
@@ -20,3 +21,7 @@ class TestAlignments:
         assert not (e1 == g2)
         assert not (g2 != g1)
         assert not (e2 != e1)
+
+    def test_subclass(self):
+        assert issubclass(Good, Alignment)
+        assert issubclass(Evil, Alignment)

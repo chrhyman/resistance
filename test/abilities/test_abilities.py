@@ -1,5 +1,6 @@
 from itertools import combinations
 
+from src.resistance.role.ability import Ability
 from src.resistance.role.abilities import *
 
 
@@ -8,6 +9,7 @@ class TestAbilities:
         abilities = [SeeSpies, SeeMerlin, ShootMerlin, LookLikeMerlin, HideFromMerlin, HideFromSpies]
 
         for ability in abilities:
+            assert issubclass(ability, Ability)
             assert ability(True) == ability(True)
             assert ability(False) == ability(False)
             assert ability(True) != ability(False)

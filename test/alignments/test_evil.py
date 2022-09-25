@@ -2,7 +2,7 @@ from src.resistance.role.alignments.evil import Evil
 from src.resistance.util.constants import EVIL_TEAM, EVIL_TEAM_MEMBER, EVIL_TEAM_MEMBER_PL
 
 
-class TestGood:
+class TestEvil:
     def test_name(self):
         e = Evil()
         assert e.name == EVIL_TEAM
