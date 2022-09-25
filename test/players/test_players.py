@@ -21,45 +21,169 @@ class TestPlayers:
         assert players.leader_index is None
 
     def test_constructor(self):
-        players0 = Players(None)
-        assert len(players0) == 0
+        players = Players(None)
+        assert len(players) == 0
 
         ps = [Player() for _ in range(4)]
-        players1 = Players(ps)
-        assert len(players1) == 4
+        players = Players(ps)
+        assert len(players) == 4
 
         with raises(TypeError):
-            ps = [f"player {n}" for n in range(5)]
-            players2 = Players(ps)
+            ps = ["strings", "don't", "work"]
+            Players(ps)
 
+        # doesn't raise
+        ps = [Player() for _ in range(MAX_PLAYERS)]
+        Players(ps)
+
+        # raises
         with raises(InvalidNumberGameError):
             ps = [Player() for _ in range(MAX_PLAYERS + 1)]
-            players3 = Players(ps)
+            Players(ps)
 
+        # removes duplicates, sets all players to unready
         p1 = Player()
         p2 = Player()
         p2.set_ready_status(True)
         assert p2.ready
-
-        ps = [p1, p1, p2, p2, p2]
-        players4 = Players(ps)
-        assert len(players4) == 2
-        assert not p2.ready
+        ps = [p1, p1, p2, p1, p2, p2]
+        players = Players(ps)
+        assert len(players) == 2
+        assert all(not player.ready for player in players)
 
     def test_add_player(self):
-        pass
+        players = Players()
+        assert len(players) == 0
+        p1 = Player()
+        returned = players.add_player(p1)
+        assert players is returned
+        assert len(players) == 1
+
+        with raises(TypeError):
+            players.add_player("only Player instances work")
+
+        # duplicate players aren't added again
+        players.add_player(p1)
+        players.add_player(p1)
+        assert len(players) == 1
+
+        # adding a new player sets all players to unready
+        p1.set_ready_status(True)
+        p2 = Player()
+        players.add_player(p2)
+        assert len(players) == 2
+        assert not p1.ready
+
+    def test_add_player_over_max(self):
+        ps = [Player() for _ in range(MAX_PLAYERS)]
+        players = Players(ps)
+
+        with raises(InvalidNumberGameError):
+            players.add_player(Player())
+
+    def test_add_player_after_started(self):
+        ps = [Player() for _ in range(MIN_PLAYERS)]
+        players = Players(ps)
+
+        for player in players:
+            player.set_ready_status(True)
+
+        players.start()
+
+        with raises(IllegalActionGameError):
+            players.add_player(Player())
 
     def test_all_players_ready(self):
-        pass
+        players = Players()
+        # uses all(), and all([]) == True
+        assert players.all_players_ready()
+
+        p1 = Player()
+        players.add_player(p1)
+        assert not players.all_players_ready()
+        p1.set_ready_status(True)
+        assert players.all_players_ready()
+
+        p2 = Player()
+        players.add_player(p2)
+        p2.set_ready_status(True)
+        assert not players.all_players_ready()
+        p1.set_ready_status(True)
+        assert players.all_players_ready()
+
+        for player in [Player() for _ in range(5)]:
+            players.add_player(player)
+
+        for player in players:
+            player.set_ready_status(True)
+
+        assert players.all_players_ready()
+        p2.set_ready_status(False)
+        assert not players.all_players_ready()
 
     def test_get_leader(self):
-        pass
+        ps = [Player() for _ in range(MIN_PLAYERS)]
+        players = Players(ps)
+        for player in players:
+            player.set_ready_status(True)
+
+        # a valid number of players and everyone is ready, but game isn't started yet
+        with raises(IllegalActionGameError):
+            players.get_leader()
+
+        players.start()
+
+        assert players.get_leader() is players.player_list[players.leader_index]
+        assert players.leader_index == 0
+
+        players.increment_leader()
+
+        assert players.get_leader() is players[players.leader_index]
+        assert players.leader_index == 1
 
     def test_get_player_by_id(self):
-        pass
+        name = "target player"
+        p1 = Player(name)
+        ps = [p1] + [Player() for _ in range(MIN_PLAYERS)]
+        players = Players(ps)
+
+        for player in players:
+            player.set_ready_status(True)
+
+        players.start()
+
+        # returns Player object for method/attribute chaining
+        assert players.get_player_by_id(p1.id) is p1
+        assert players.get_player_by_id(p1.id).name == name
+
+        # no player has id 0
+        assert players.get_player_by_id(0) is None
+
+        # non-int arguments will never find a player, even if it's the Player object
+        assert players.get_player_by_id(p1) is None
 
     def test_increment_leader(self):
-        pass
+        ps = [Player() for _ in range(MIN_PLAYERS)]
+        players = Players(ps)
+        for player in players:
+            player.set_ready_status(True)
+
+        # can't call before game is started
+        with raises(IllegalActionGameError):
+            players.increment_leader()
+
+        players.start()
+
+        ls = []
+        for i in range(MIN_PLAYERS):
+            assert players.leader_index == i
+            ls.append(players.get_leader())
+            players.increment_leader()
+
+        assert len(ls) == len(players)
+
+        # it wraps to the beginning after the last increment
+        assert players.leader_index == 0
 
     def test_next_leader(self):
         pass
