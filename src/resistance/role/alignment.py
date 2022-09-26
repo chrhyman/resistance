@@ -2,6 +2,24 @@ from abc import ABC, abstractmethod
 
 
 class Alignment(ABC):
+    """
+    An Alignment in a game of the Resistance. Determines the teams Good and Evil.
+
+    ----
+
+    **Instance Properties**::
+
+        Alignment.name: str
+        Alignment.good: bool
+        Alignment.member: str
+        Alignment.member_pl: str
+
+    **Implements**::
+
+        Alignment.__eq__  # checks that types match
+        str(Alignment) == Alignment.name
+        bool(Alignment) == Alignment.good
+    """
     def __bool__(self) -> bool:
         return bool(self.good)
 
@@ -17,19 +35,19 @@ class Alignment(ABC):
     @property
     @abstractmethod
     def name(self) -> str:
-        pass
+        """The team's name"""
 
     @property
     @abstractmethod
     def good(self) -> bool:
-        pass
+        """Whether this team is Good"""
 
     @property
     @abstractmethod
     def member(self) -> str:
-        pass
+        """The name of a generic member of this team"""
 
     @property
     @abstractmethod
     def member_pl(self) -> str:
-        pass
+        """The plural form of ``Alignment.member``"""

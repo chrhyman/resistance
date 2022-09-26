@@ -5,6 +5,11 @@ from ..abilities import SeeSpies, SeeMerlin, ShootMerlin, LookLikeMerlin, HideFr
 
 
 class BaseGood(Role):
+    """
+    A basic Good team member with no special abilities.
+
+    AKA: A member of the Resistance
+    """
     @property
     def name(self) -> str:
         return self.alignment.member

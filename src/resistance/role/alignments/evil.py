@@ -3,6 +3,9 @@ from ...util.constants import EVIL_TEAM, EVIL_TEAM_MEMBER, EVIL_TEAM_MEMBER_PL
 
 
 class Evil(Alignment):
+    """
+    The Evil team, aka the Spies or the Minions of Mordred.
+    """
     @property
     def name(self) -> str:
         return EVIL_TEAM

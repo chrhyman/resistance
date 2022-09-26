@@ -6,7 +6,20 @@ Self = TypeVar("Self", bound="Ability")
 
 class Ability(ABC):
     """
-    A wrapper for a boolean representing a single ability a role may have.
+    A single Ability for a Role. Implemented as a wrapper around a boolean value.
+
+    ----
+
+    **Instance Properties**::
+
+        Ability.name: str
+        Ability.value: bool
+
+    **Implements**::
+
+        Ability.__eq__  # checks that types and values match
+        str(Ability)    # 'can X' or 'cannot X' where X is name
+        bool(Ability) == Ability.value
     """
     def __init__(self, value: bool) -> None:
         self.value = bool(value)
@@ -26,4 +39,4 @@ class Ability(ABC):
     @property
     @abstractmethod
     def name(self) -> str:
-        pass
+        """The name of the ability"""

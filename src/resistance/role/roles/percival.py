@@ -4,6 +4,12 @@ from ...util.constants import PERCIVAL
 
 
 class Percival(BaseGood):
+    """
+    A member of the Good team who can identify Merlin.
+    If Morgana is in the game, there will be two possible Merlins.
+
+    AKA: Body Guard
+    """
     @property
     def name(self) -> str:
         return PERCIVAL
