@@ -194,8 +194,9 @@ class TestPlayers:
             player.set_ready_status(True)
 
         players.start()
-        dc_players = deepcopy(players)
 
+        # create two independent instances that respond identically
+        dc_players = deepcopy(players)
         assert players is not dc_players
         assert players.get_leader() is not dc_players.get_leader()
         assert players.get_leader() == dc_players.get_leader()
@@ -214,16 +215,122 @@ class TestPlayers:
             if player not in unique_leaders:
                 unique_leaders.append(player)
 
-        assert len(unique_leaders) == MIN_PLAYERS
+        assert len(unique_leaders) == len(players)
 
     def test_remove_player(self):
-        pass
+        p1 = Player()
+        ps = [p1] + [Player() for _ in range(MIN_PLAYERS)]
+        players = Players(ps)
+
+        assert p1 in players
+        assert players.remove_player(p1)
+        assert p1 not in players
+
+        # can remove a player who is ready
+        players.add_player(p1)
+        p1.set_ready_status(True)
+        assert players.remove_player(p1)
+        assert p1 not in players
+
+        # removing a player not in list returns False without raising an error
+        p2 = Player()
+        assert p2 not in players
+        assert not players.remove_player(p2)
+
+        # also returns False when provided the wrong type or None
+        assert not players.remove_player(None)
+
+        for player in players:
+            player.set_ready_status(True)
+
+        players.start()
+
+        p3 = Player()
+        assert p3 not in players
+
+        # can't call if game in progress, even if player isn't in game
+        with raises(IllegalActionGameError):
+            players.remove_player(p3)
+
+    def test_remove_player_unready(self):
+        p1 = Player()
+        ps = [p1] + [Player() for _ in range(MIN_PLAYERS)]
+        players = Players(ps)
+
+        for player in players:
+            player.set_ready_status(True)
+
+        assert players.remove_player(p1)
+
+        for player in players:
+            assert not player.ready
 
     def test_remove_player_by_id(self):
-        pass
+        p1 = Player()
+        p2 = Player()
+        players = Players([p1, p2])
+
+        assert p1 in players
+        assert p2 in players
+        assert players.remove_player_by_id(p1.id)
+        assert p1 not in players
+
+        assert not players.remove_player_by_id(p1.id)
+        assert not players.remove_player_by_id(p2)
+        assert players.remove_player_by_id(p2.id)
+        assert len(players) == 0
 
     def test_start(self):
-        pass
+        ps = [Player() for _ in range(MIN_PLAYERS - 1)]
+        players = Players(ps)
+        for player in players:
+            player.set_ready_status(True)
+
+        with raises(InvalidNumberGameError):
+            players.start()
+
+        players.add_player(Player())
+
+        # not all players are ready
+        with raises(IllegalActionGameError):
+            players.start()
+
+        for player in players:
+            player.set_ready_status(True)
+
+        # doesn't raise
+        players.start()
+
+        # can't start a started game
+        with raises(IllegalActionGameError):
+            players.start()
+
+        ps = [Player() for _ in range(MAX_PLAYERS)]
+        players = Players(ps)
+        # the add_player method raises if you try to add more than Players.MAX, so this test hacks it in
+        players.player_list.append(Player())
+        for player in players:
+            player.set_ready_status(True)
+
+        with raises(InvalidNumberGameError):
+            players.start()
 
     def test_unready_all_players(self):
-        pass
+        ps = [Player() for _ in range(MIN_PLAYERS)]
+        players = Players(ps)
+        for player in players:
+            player.set_ready_status(True)
+
+        players.unready_all_players()
+        for player in players:
+            assert not player.ready
+
+        for player in players:
+            player.set_ready_status(True)
+
+        players.start()
+
+        # does nothing after game started
+        players.unready_all_players()
+        for player in players:
+            assert player.ready

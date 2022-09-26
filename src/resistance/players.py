@@ -160,7 +160,7 @@ class Players:
         """
         return self.increment_leader().get_leader()
 
-    def remove_player(self, player: Player) -> bool:
+    def remove_player(self, player: Player | None) -> bool:
         """
         ``True`` if ``player`` was removed from ``Players``.
         ``False`` if ``player`` isn't in ``Players`` or isn't an instance of ``Player``.
